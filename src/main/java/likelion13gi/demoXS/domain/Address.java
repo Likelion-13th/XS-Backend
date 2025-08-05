@@ -1,4 +1,27 @@
 package likelion13gi.demoXS.domain;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Embeddable
+@AllArgsConstructor
+@Getter
 public class Address {
+
+    @Column(nullable = false)
+    private String zipcode;
+
+    @Column(nullable = false)
+    private String address; //
+
+    @Column(nullable = false)
+    private String addressDetail; //
+
+    public Address() {
+        this.zipcode = "10540";
+        this.address = "경기도 고양시 덕양구 항공대학로 76";
+        this.addressDetail = "한국항공대학교";
+    }
 }

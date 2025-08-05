@@ -29,3 +29,35 @@ spring:
     properties:
       hibernate:
         format_sql: true
+jwt:
+  secret: your_very_long_and_secure_secret_key_that_is_32_bytes_or_more
+  accessExpirationTime: 3600000
+  refreshExpirationTime: 604800000
+
+---
+# DB-JPA Global settig
+spring:
+  #MySQL
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: never
+  #JPA
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        use_sql_comments: true
+        hbm2ddl:
+          auto: update
+        default_batch_fetch_size: 1000
+---
+# Swagger
+springdoc:
+  swagger-ui:
+    path: /swagger
+  cache:
+    disabled: true
+  use-fqn: true
+  packages-to-scan: likelion13gi.demoXS
