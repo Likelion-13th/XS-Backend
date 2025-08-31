@@ -48,7 +48,8 @@ public class Order extends BaseEntity {
     private User user;
 
     /** 생성자 및 비즈니스 로직 등등..**/
-    public Order(User user, Item item, int quantity) {
+    // 내부 생성자 메서드
+    private Order(User user, Item item, int quantity) {
         this.user = user;
         this.item = item;
         this.quantity = quantity;
@@ -70,6 +71,7 @@ public class Order extends BaseEntity {
 
     //양방향 편의 메서드
     @SuppressWarnings("lombok")
+    // 그저 경고를 제거하기 위함 입니다..
     public void setUser(User user) {
         this.user = user;
     }

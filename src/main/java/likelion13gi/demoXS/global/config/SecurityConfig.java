@@ -1,9 +1,9 @@
 package likelion13gi.demoXS.global.config;
 
-//import likelion13gi.demoXS.login.auth.jwt.AuthCreationFilter;
-//import likelion13gi.demoXS.login.auth.jwt.JwtValidationFilter;
-//import likelion13gi.demoXS.login.auth.utils.OAuth2SuccessHandler;
-//import likelion13gi.demoXS.login.auth.utils.OAuth2UserServiceImpl;
+//import likelion13gi.demoXS.login.authorize.jwt.AuthCreationFilter;
+//import likelion13gi.demoXS.login.authorize.jwt.JwtValidationFilter;
+//import likelion13gi.demoXS.login.authorize.utils.OAuth2SuccessHandler;
+//import likelion13gi.demoXS.login.authorize.utils.OAuth2UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

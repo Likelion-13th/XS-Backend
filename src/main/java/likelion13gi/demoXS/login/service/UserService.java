@@ -4,9 +4,9 @@ import likelion13gi.demoXS.domain.User;
 import likelion13gi.demoXS.global.api.ErrorCode;
 import likelion13gi.demoXS.global.exception.GeneralException;
 //import likelion13gi.demoXS.global.utils.Redis.RedisUtil;
-//import likelion13gi.demoXS.login.auth.dto.JwtDto;
-//import likelion13gi.demoXS.login.auth.jwt.JwtTokenUtils;
-//import likelion13gi.demoXS.login.auth.service.JpaUserDetailsManager;
+//import likelion13gi.demoXS.login.authorize.dto.JwtDto;
+//import likelion13gi.demoXS.login.authorize.jwt.JwtTokenUtils;
+//import likelion13gi.demoXS.login.authorize.service.JpaUserDetailsManager;
 import likelion13gi.demoXS.login.converter.UserConverter;
 import likelion13gi.demoXS.login.dto.UserRequestDto;
 import likelion13gi.demoXS.login.repository.UserRepository;
@@ -40,7 +40,7 @@ public class UserService {
     }
 
     public User findByProviderId(String providerId) {
-        return userRepository.findByProviderId(providerId);
+        return userRepository.findByProviderId(providerId).orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
     }
 
     public User findByPhoneNumber(String phoneNumber) {
