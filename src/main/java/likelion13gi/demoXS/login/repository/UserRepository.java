@@ -2,25 +2,31 @@ package likelion13gi.demoXS.login.repository;
 
 import likelion13gi.demoXS.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, String> {
-    // 1. 사용자 계정이름으로 사용자 정보를 회수하는 기능
-    Optional<User> findByUsernickname(String usernickname);
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    // 2. 사용자 이메일으로 사용자 정보를 회수하는 기능
+    // user_id 기반 사용자 찾기 (feature/4)
+    Optional<User> findById(Long userId);
+
+    boolean existsById(Long userId);
+
+    // providerId(카카오 고유 ID) 기반 조회 (feature/4)
+    Optional<User> findByProviderId(String providerId);
+
+    boolean existsByProviderId(String providerId);
+
     Optional<User> findByPhoneNumber(String phoneNumber);
 
-    // 3. 사용자 계정이름을 가진 사용자 정보가 존재하는지 판단하는 기능
-    boolean existsByUsernickname(String usernickname);
+    Boolean existsByPhoneNumber(String phoneNumber);
 
-    // 4. 사용자 이메일을 가진 사용자 정보가 존재하는지 판단하는 기능
-    boolean existsByPhoneNumber(String phoneNumber);
+    Optional<User> findByUsernickname(String userName);
 
-    User findByUid(String uid);
+    // usernickname(닉네임) 기반 사용자 찾기 (develop)
+    //List<User> findByUsernickname(String usernickname);
 
-    User findByProviderId(String providerId);
+    // 향후 필요 시 사용할 수 있도록 주석 유지
+    //Optional<User> findByKakaoId(String kakaoId);
 }

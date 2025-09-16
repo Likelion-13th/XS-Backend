@@ -1,9 +1,9 @@
 package likelion13gi.demoXS.global.config;
 
-//import likelion13gi.demoXS.login.auth.jwt.AuthCreationFilter;
-//import likelion13gi.demoXS.login.auth.jwt.JwtValidationFilter;
-//import likelion13gi.demoXS.login.auth.utils.OAuth2SuccessHandler;
-//import likelion13gi.demoXS.login.auth.utils.OAuth2UserServiceImpl;
+//import likelion13gi.demoXS.login.authorize.jwt.AuthCreationFilter;
+//import likelion13gi.demoXS.login.authorize.jwt.JwtValidationFilter;
+//import likelion13gi.demoXS.login.authorize.utils.OAuth2SuccessHandler;
+//import likelion13gi.demoXS.login.authorize.utils.OAuth2UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -84,8 +84,9 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
-                "http://sajang-dev.ap-northeast-2.elasticbeanstalk.com",
-                "https://likelionshop.netlify.app"
+                //"백엔드 서버 주소",
+                "https://xsfrontend.netlify.app/",
+                "http://localhost:8080"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));

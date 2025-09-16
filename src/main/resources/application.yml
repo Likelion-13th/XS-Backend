@@ -17,11 +17,6 @@ springdoc:
 ---
 
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/sajang_db
-    username: sajang_user
-    password: sajang_password
   jpa:
     hibernate:
       ddl-auto: create

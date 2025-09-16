@@ -3,7 +3,6 @@ package likelion13gi.demoXS.domain;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Embeddable
 @AllArgsConstructor

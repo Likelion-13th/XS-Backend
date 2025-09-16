@@ -1,7 +1,7 @@
 package likelion13gi.demoXS.login.converter;
 
 import likelion13gi.demoXS.domain.User;
-//import likelion13gi.demoXS.login.auth.dto.JwtDto;
+//import likelion13gi.demoXS.login.authorize.dto.JwtDto;
 import likelion13gi.demoXS.login.dto.UserRequestDto;
 
 public class UserConverter {

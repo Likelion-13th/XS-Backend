@@ -1,75 +1,45 @@
 package likelion13gi.demoXS.domain;
 
-import jakarta.persistence.*; // * = 이 패키지 안에 있는 모든 파일 다 가져온다!
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import likelion13gi.demoXS.domain.entity.BaseEntity;
-import likelion13gi.demoXS.domain.Category;
-import likelion13gi.demoXS.global.constant.OrderStatus;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
-@AllArgsConstructor
+@Table(name = "item")
 @NoArgsConstructor
-@Table(name = "items")
+@AllArgsConstructor
 public class Item extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
     @Setter(AccessLevel.PRIVATE)
-    private Long id; // PK
+    private Long id;
 
     @Column(nullable = false)
-    @Setter
+    private String itemName;
+
+    @Column(nullable = false)
     private int price;
 
     @Column(nullable = false)
-    @Setter
-    private String name;
+    private String imagePath;
 
     @Column(nullable = false)
-    @Setter
-    private String company;
+    private String brand;
 
     @Column(nullable = false)
-    @Setter
-    private boolean news;
+    private boolean isNew= false;
 
-    // Category 와 연관관계 설정
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "cId")
-    @Setter
-    private Category category;
+    //Category와 다대다 연관관계 설정
+    @ManyToMany(mappedBy = "items")
+    private List<Category> categories = new ArrayList<>();
 
 
-
-    // Order와의 관계
-    @OneToMany(mappedBy = "item")
-    private List<Order> orders = new ArrayList<>();
-
-    private boolean isNewProduct() {
-        LocalDateTime productCreationTime = this.getCreatedAt();
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime threeMonthsAgo = now.minusMonths(3); // 3개월 전 날짜 계산
-        return productCreationTime.isAfter(threeMonthsAgo);
-    }
-
-    public void updateCategory(Category category) {
-        this.category = category;
-    }
-
-    public Item(String name, int price) {
-        if (price < 0) {
-            throw new IllegalArgumentException("가격은 0원 이상이어야 합니다.");
-        }
-        this.name = name;
-        this.price = price;
-        this.news = isNewProduct();
-    }
-
+    /** Order과 일대다 연관관계 설정
+     * -> Item에서 Order의 목록을 볼 일이 없으므로 단방향 처리 **/
 }
