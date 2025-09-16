@@ -5,7 +5,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import likelion13gi.demoXS.global.api.ErrorCode;
 import likelion13gi.demoXS.global.exception.GeneralException;
-import likelion13gi.demoXS.login.dto.JwtDto;
+import likelion13gi.demoXS.login.authorize.dto.JwtDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
@@ -120,3 +120,12 @@ public class TokenProvider {
 
 
 }
+
+/* 1) 왜 필요한가?
+ - 먼저 우리 서비스에서는 JWT 토큰을 이용한 인증 방식을 채택하고 있습니다.
+ - 즉 인증이 필요하다면, 일단 액세스 토큰과 리프레시 토큰을 만들어 내야 합니다.
+ - 또한, 해당 토큰이 만료되진 않았는지, 서명되진 않았는지를 검증해야 인증의 안정성이 보장됩니다.
+ 2) 없다면/틀리면?
+ - JWT 토큰 인증 방식을 채택한 이유가 없어집니다. (인증할 토큰이 없기 때문이죠.)
+ - 토큰 생성 절차를 분산시킬 순 있겠지만, 그러면 유지보수하기 껄끄러워집니다.
+ */

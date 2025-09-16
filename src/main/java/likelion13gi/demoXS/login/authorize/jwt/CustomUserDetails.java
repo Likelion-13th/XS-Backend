@@ -102,3 +102,10 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 }
+
+/* 1) 왜 필요한가?
+ - UserRepository에 저장된 정보들을 가공해, Spring Security가 써먹을(?) 수 있도록 해야 합니다.
+ - 즉, Spring Security가 관리할 UserDetails 객체 타입으로 유저 정보를 다루기 위해 필요합니다.
+ 2) 없으면/틀리면?
+ - Spring Security가 써먹을 유저 정보(UserDetails)가 없어집니다. 즉 인증 기능이 무의미해집니다.
+ */

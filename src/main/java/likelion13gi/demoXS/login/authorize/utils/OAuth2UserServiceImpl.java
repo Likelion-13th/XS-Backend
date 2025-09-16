@@ -42,3 +42,13 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
         );
     }
 }
+
+/* 1) 왜 필요한가?
+ - 카카오 소셜 로그인에 성공했을 때, 카카오 OpenAPI를 통해 받아온 정보들을 우리 서비스에 맞게 가공해야 합니다.
+ - 특히 providerId는 우리가 유저를 식별하는 PK로 쓸 예정이기에 이를 받아와 저장할 필요가 있습니다.
+ - 닉네임, providerId 등의 정보를 받아와서 OAuth2User 객체에 저장하고, 이를 유저에 반영해야 하기에 이 코드가 필요합니다.
+ 2) 없으면/틀리면?
+ - OAuth2SuccessHandler, JpaUserDetailsManager 등 우리 서비스에 있는 대부분의 클래스에서 특정 유저를 찾을 때 providerId를
+ 사용하는데, Spring에서 관리하는 DefaultOAuth2User에 이 정보가 없어집니다.
+ - 즉 이게 없으면 우리는 유저를 식별해내는 기능 자체를 못 씁니다. 사실상 대부분의 로직이 의미가 없어지죠.
+ */
