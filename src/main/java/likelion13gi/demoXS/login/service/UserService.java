@@ -3,58 +3,130 @@ package likelion13gi.demoXS.login.service;
 import likelion13gi.demoXS.domain.User;
 import likelion13gi.demoXS.global.api.ErrorCode;
 import likelion13gi.demoXS.global.exception.GeneralException;
-//import likelion13gi.demoXS.global.utils.Redis.RedisUtil;
-//import likelion13gi.demoXS.login.authorize.dto.JwtDto;
-//import likelion13gi.demoXS.login.authorize.jwt.JwtTokenUtils;
-//import likelion13gi.demoXS.login.authorize.service.JpaUserDetailsManager;
-import likelion13gi.demoXS.login.converter.UserConverter;
-import likelion13gi.demoXS.login.dto.UserRequestDto;
+import likelion13gi.demoXS.login.authorize.dto.JwtDto;
+import likelion13gi.demoXS.login.authorize.jwt.RefreshToken;
+import likelion13gi.demoXS.login.authorize.jwt.TokenProvider;
+import likelion13gi.demoXS.login.authorize.repository.RefreshTokenRepository;
+import likelion13gi.demoXS.login.authorize.service.JpaUserDetailsManager;
 import likelion13gi.demoXS.login.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.CachingUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-//    private final JpaUserDetailsManager manager;
-//    private final JwtTokenUtils jwtTokenUtils;
-//    private final RedisUtil redisUtil;
-    // private final AmazonS3Manager amazonS3Manager;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final TokenProvider tokenProvider;
+    private final JpaUserDetailsManager userDetailsManager;
 
-    // 로그인
-
-    // username으로 User찾기
-    public User findUserByUserName(String userName) {
-        return userRepository.findByUsernickname(userName)
-                .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND_BY_USERNICKNAME));
+    public boolean checkMemberByProviderId(String providerId) {
+        return userRepository.findByProviderId(providerId).isPresent();
     }
 
-    public User findByProviderId(String providerId) {
-        return userRepository.findByProviderId(providerId).orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
+    public Optional<User> findByProviderId(String providerId) {
+        return userRepository.findByProviderId(providerId);
     }
 
-    public User findByPhoneNumber(String phoneNumber) {
-        return userRepository.findByPhoneNumber(phoneNumber).orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND_BY_PHONENUMBER));
+    public User getAuthenticatedUser(String providerId) {
+        return userRepository.findByProviderId(providerId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_AUTHENTICATED));
     }
 
-    public Boolean checkMemberByPhoneNumber(String phoneNumber) {
-        return userRepository.existsByPhoneNumber(phoneNumber);
+    @Transactional
+    public void saveRefreshToken(String providerId, String refreshToken) {
+        User user = userRepository.findByProviderId(providerId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
+
+        RefreshToken token = refreshTokenRepository.findByUser(user)
+                .map(existingToken -> {
+                    existingToken.updateRefreshToken(refreshToken);
+                    return existingToken;
+                })
+                .orElseGet(() -> {
+                    return RefreshToken.builder()
+                            .user(user)
+                            .refreshToken(refreshToken)
+                            .ttl(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 7)
+                            .build();
+                });
+
+        refreshTokenRepository.save(token);
     }
 
-    public User createUser(UserRequestDto userReqDto) {
-        // 새로운 사용자 생성
-        User newUser = userRepository.save(UserConverter.saveUser(userReqDto));
+    @Transactional
+    public JwtDto jwtMakeSave(String providerId) {
+        UserDetails userDetails = userDetailsManager.loadUserByUsername(providerId);
+        JwtDto jwt = tokenProvider.generateTokens(userDetails);
+        saveRefreshToken(providerId, jwt.getRefreshToken());
+        return jwt;
+    }
 
-        return newUser;
+    @Transactional
+    public JwtDto reissue(HttpServletRequest request) {
+        String accessToken = request.getHeader("Authorization");
+        if(accessToken != null && accessToken.startsWith("Bearer ")) {
+            accessToken = accessToken.substring(7); // 'Bearer ' 뒤부터 토큰 값 읽기 시작
+        }
+
+        Claims claims;
+        try{
+            claims = tokenProvider.parseClaimAllowExpired(accessToken);
+        } catch (GeneralException e) {
+            throw new GeneralException(ErrorCode.TOKEN_INVALID);
+        }
+
+        String providerId = claims.getSubject();
+        if (providerId == null || providerId.isEmpty()) {
+            throw new GeneralException(ErrorCode.TOKEN_INVALID);
+        }
+
+        User user = findByProviderId(providerId)
+                .orElseThrow(() -> {
+                    return new GeneralException(ErrorCode.USER_NOT_FOUND);
+                });
+
+        RefreshToken refreshToken = refreshTokenRepository.findByUser(user)
+                .orElseThrow(() -> new GeneralException(ErrorCode.WRONG_REFRESH_TOKEN));
+
+        if (!tokenProvider.validateToken(refreshToken.getRefreshToken())) {
+            refreshTokenRepository.deleteByUser(user);
+            throw new GeneralException(ErrorCode.TOKEN_EXPIRED);
+        }
+
+        UserDetails userDetails = userDetailsManager.loadUserByUsername(providerId);
+        JwtDto newJwt = tokenProvider.generateTokens(userDetails);
+
+        refreshToken.updateRefreshToken(newJwt.getRefreshToken());
+        refreshTokenRepository.save(refreshToken);
+
+        return newJwt;
+    }
+
+    @Transactional
+    public void logout(HttpServletRequest request) {
+        String accessToken = request.getHeader("Authorization");
+        if(accessToken != null && accessToken.startsWith("Bearer ")) {
+            accessToken = accessToken.substring(7);
+        }
+
+        Claims claims = tokenProvider.parseClaims(accessToken);
+        String providerId = claims.getSubject();
+        if (providerId == null || providerId.isEmpty()) {
+            throw new GeneralException(ErrorCode.TOKEN_INVALID);
+        }
+
+        User user = findByProviderId(providerId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
+        refreshTokenRepository.deleteByUser(user);
+        refreshTokenRepository.flush();
     }
 }

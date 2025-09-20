@@ -21,7 +21,7 @@ public class Item extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String itemName;
+    private String name;
 
     @Column(nullable = false)
     private int price;
@@ -30,7 +30,7 @@ public class Item extends BaseEntity {
     private String imagePath;
 
     @Column(nullable = false)
-    private String brand;
+    private String company;
 
     @Column(nullable = false)
     private boolean isNew= false;
