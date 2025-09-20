@@ -28,9 +28,9 @@ public class ItemResponse {
     public static ItemResponse from(Item item) {
         return new ItemResponse(
                 item.getId(),
-                item.getItemName(),
+                item.getName(),
                 item.getPrice(),
-                item.getBrand(),
+                item.getCompany(),
                 item.getImagePath(),
                 item.isNew()
         );

@@ -59,3 +59,23 @@ springdoc:
     disabled: true
   use-fqn: true
   packages-to-scan: likelion13gi.demoXS
+---
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          # 여기서 'kakao'는 임의의 식별자(registrationId)입니다.
+          # 다른 제공자(google, naver 등)를 추가할 수 있습니다.
+          kakao:
+            client-id: ${KAKAO_REST_API_KEY}
+            client-secret: ${KAKAO_CLIENT_SECRET}
+            redirect-uri: "http://localhost:8080/login/oauth2/code/kakao" # 보통 이 값을 그대로 사용합니다.
+            authorization-grant-type: authorization_code
+            client-authentication-method: client_secret_post
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
