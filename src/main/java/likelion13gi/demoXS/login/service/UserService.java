@@ -79,7 +79,7 @@ public class UserService {
 
         Claims claims;
         try{
-            claims = tokenProvider.parseClaimAllowExpired(accessToken);
+            claims = tokenProvider.parseClaimsAllowExpired(accessToken);
         } catch (GeneralException e) {
             throw new GeneralException(ErrorCode.TOKEN_INVALID);
         }

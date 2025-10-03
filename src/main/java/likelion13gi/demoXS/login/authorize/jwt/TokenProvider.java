@@ -156,7 +156,7 @@ public class TokenProvider {
      * 만료 허용 파싱
      * - 만료된 토큰이라도 Claims만 뽑아 써야 하는 경우(예: Refresh로 재발급) 사용
      */
-    public Claims parseClaimAllowExpired(String token) {
+    public Claims parseClaimsAllowExpired(String token) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(secretKey)
