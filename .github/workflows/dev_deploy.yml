@@ -10,7 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
-    # develop branch로 pr 요청되고 merge가 되면 작동
 
     # if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
     # 만약 main branch로 작업하고 있다면, 아래와 같이 설정하고 진행
