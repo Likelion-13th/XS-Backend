@@ -98,9 +98,9 @@ spring:
     activate:
       on-profile: local
   datasource:
-    url: ${local.db.url}
-    username: ${local.db.username}
-    password: ${local.db.password}
+    url: ${LOCAL_DB_URL}
+    username: ${LOCAL_DB_USERNAME}
+    password: ${LOCAL_DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:
@@ -120,9 +120,9 @@ spring:
     activate:
       on-profile: develop
   datasource:
-    url: ${aws.db.url}
-    username: ${aws.db.username}
-    password: ${aws.db.password}
+    url: ${AWS_DB_URL}
+    username: ${AWS_DB_USERNAME}
+    password: ${AWS_DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:
