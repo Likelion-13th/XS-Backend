@@ -1,7 +1,7 @@
 # default profile settings
 spring:
   profiles:
-    active: develop
+    active: local
 
 #Swagger
 springdoc:
