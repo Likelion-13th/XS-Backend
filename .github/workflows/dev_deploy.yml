@@ -57,7 +57,7 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACTION_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY }}
           application_name: 'sajang-dev'         # 🔥 EB 애플리케이션 이름
-          environment_name: ' Sajang-dev-env'    # 🔥 EB 환경 이름
+          environment_name: ' SAJANG-dev-env'    # 🔥 EB 환경 이름
           version_label: github-action-${{ steps.current-time.outputs.formattedTime }}
           region: 'ap-northeast-2'
           deployment_package: 'deploy/deploy.zip'
