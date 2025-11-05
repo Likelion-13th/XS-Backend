@@ -135,6 +135,7 @@
 #      use_sql_comments: true
 #      default_batch_fetch_size: 1000
 
+#Gemini가 생성한 수정본 (위 버전대로면 충돌이 일어난다고 함)
 # ==================================
 # 전역(Global) 설정 (공통)
 # - DB 접속 정보, OAuth 리디렉션 URI 등 "환경마다 달라지는" 설정은 절대 넣지 않습니다.
