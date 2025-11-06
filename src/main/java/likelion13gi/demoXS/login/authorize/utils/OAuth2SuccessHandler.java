@@ -27,8 +27,8 @@ import java.util.Map;
 
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
+@Component
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final UserService userService;
@@ -90,8 +90,6 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         throw new GeneralException(ErrorCode.UNAUTHORIZED);
     }
 }
-
-
 /* 1) 왜 필요한가?
  - 신규 회원의 경우 회원의 정보들이 DB에 등록되어야 합니다.
  - 로그인에 성공한 유저가 액세스토큰과 리프레시토큰을 발급받아야 하기에 필요합니다.
