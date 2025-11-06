@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Set;
-
 @Slf4j
 @Tag(name = "인증", description = "OAuth2 로그인 시작 API")
 @RestController
