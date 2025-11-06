@@ -86,7 +86,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
-                //"백엔드 서버 주소",
+                "http://sajang-dev-env.eba-riup6cju.ap-northeast-2.elasticbeanstalk.com",
                 "https://xsfrontend.netlify.app/",
                 "http://localhost:8080"
         ));
