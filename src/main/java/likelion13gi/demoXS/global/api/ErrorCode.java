@@ -10,6 +10,7 @@ public enum ErrorCode implements BaseCode { // 실패
     // Common
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "COMMON_400", "잘못된 요청입니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON_500", "서버 에러, 서버 개발자에게 문의하세요."),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "COMMON_400", "인증되지 않은 요청입니다."),
 
     // User
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_4041", "존재하지 않는 회원입니다."),
@@ -21,6 +22,8 @@ public enum ErrorCode implements BaseCode { // 실패
     USER_INFO_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_4042", "사용자 정보를 찾을 수 없습니다."),
     USER_ORDERS_EMPTY(HttpStatus.NOT_FOUND, "USER_4043", "사용자의 주문 내역이 없습니다."),
     USER_ORDER_STATUS_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_4044", "해당 주문이 없습니다."),
+
+    INVALID_MILEAGE(HttpStatus.BAD_REQUEST, "USER_4045", "보유한 마일리지를 초과하여 사용 및 회수 할 수 없습니다."),
 
     // Jwt
     WRONG_REFRESH_TOKEN(HttpStatus.NOT_FOUND, "JWT_4041", "일치하는 리프레시 토큰이 없습니다."),
@@ -39,7 +42,6 @@ public enum ErrorCode implements BaseCode { // 실패
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "ORDER_4041", "해당 주문을 찾을 수 없습니다."),
     ORDER_CANCEL_FAILED(HttpStatus.BAD_REQUEST, "ORDER_4001", "주문 취소에 실패했습니다."),
     ORDER_CREATE_FAILED(HttpStatus.BAD_REQUEST, "ORDER_4002", "주문 생성 요청이 잘못되었습니다."),
-    INVALID_MILEAGE(HttpStatus.BAD_REQUEST, "MILEAGE_4001", "마일리지가 정확히 저장되지 않았습니다."),
 
     // S3
     S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3_500", "S3 업로드에 실패하였습니다."),
@@ -48,9 +50,7 @@ public enum ErrorCode implements BaseCode { // 실패
 
 
     // User Address 관련 에러 코드 추가
-    ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "ADDRESS_4041", "해당 사용자의 주소 정보를 찾을 수 없습니다."),
-    USER_NOT_FOUND_BY_USERNICKNAME(HttpStatus.NOT_FOUND, "USER_4042", "해당 사용자를 닉네임으로 찾을 수 없습니다."),
-    USER_NOT_FOUND_BY_PHONENUMBER(HttpStatus.NOT_FOUND, "USER_4043", "해당 사용자를 전화번호로 찾을 수 없습니다.");
+    ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "ADDRESS_4041", "해당 사용자의 주소 정보를 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
