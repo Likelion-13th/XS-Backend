@@ -1,5 +1,6 @@
 package likelion13gi.demoXS.DTO.response;
 
+import likelion13gi.demoXS.domain.Address;
 import likelion13gi.demoXS.domain.Order;
 import likelion13gi.demoXS.domain.User;
 import likelion13gi.demoXS.global.constant.OrderStatus;
@@ -16,7 +17,9 @@ public class UserInfoResponse {
     private String usernickname;
     private int recentTotal;
     private int maxMileage;
+    private Address address;
     private Map<OrderStatus, Integer> orderStatusCounts; // 각 상태별 주문 개수
+
 
     public static UserInfoResponse from(User user) {
         // 각 상태별 주문 개수 계산
@@ -35,6 +38,7 @@ public class UserInfoResponse {
                 user.getUsernickname(),
                 user.getRecentTotal(),
                 user.getMaxMileage(),
+                user.getAddress(),
                 orderStatusCounts
         );
     }
