@@ -59,6 +59,22 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
                 (Map<String, Object>) oAuth2User.getAttributes().getOrDefault("properties", Collections.emptyMap());
         String nickname = properties.getOrDefault("nickname", "카카오사용자").toString();
 
+        // 3) ~~GPT 코드로 만든~~신규 회원 가입 알고리즘
+        Optional<User> userOptional = userRepository.findByProviderId(providerId);
+
+        if (userOptional.isEmpty()) {
+            // ★ 신규 유저인 경우, DB에 저장 (회원가입)
+            log.info("// 신규 사용자 발견, DB에 저장합니다. providerId: {}", providerId);
+            User newUser = User.builder()
+                    .providerId(providerId)
+                    .usernickname(nickname) // CustomUserDetails를 보니 usernickname을 쓰시네요
+                    // .address(new Address(...)) // 주소 등 기본값 필요 시 설정
+                    // .role(Role.ROLE_USER) // User 엔티티에 Role이 있다면 필수!
+                    .build();
+
+            userRepository.save(newUser); // ★ DB에 저장 (신규 가입 완료)
+    }
+
         // 3) Security에서 사용할 attributes를 확장:
         //    - 원본 attributes를 복사한 뒤 provider_id, nickname을 명시적 key로 추가
         Map<String, Object> extendedAttributes = new HashMap<>(oAuth2User.getAttributes());
