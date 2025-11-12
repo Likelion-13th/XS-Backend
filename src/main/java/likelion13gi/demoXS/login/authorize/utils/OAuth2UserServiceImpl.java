@@ -1,5 +1,6 @@
 package likelion13gi.demoXS.login.authorize.utils;
 
+import likelion13gi.demoXS.domain.Address;
 import likelion13gi.demoXS.domain.User;
 import likelion13gi.demoXS.login.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -63,16 +64,23 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
         Optional<User> userOptional = userRepository.findByProviderId(providerId);
 
         if (userOptional.isEmpty()) {
-            // ★ 신규 유저인 경우, DB에 저장 (회원가입)
-            log.info("// 신규 사용자 발견, DB에 저장합니다. providerId: {}", providerId);
+            // ★★★ 여기가 최종 수정 지점 ★★★
             User newUser = User.builder()
                     .providerId(providerId)
-                    .usernickname(nickname) // CustomUserDetails를 보니 usernickname을 쓰시네요
-                    // .address(new Address(...)) // 주소 등 기본값 필요 시 설정
-                    // .role(Role.ROLE_USER) // User 엔티티에 Role이 있다면 필수!
-                    .build();
+                    .usernickname(nickname)
+                    .deletable(true) // 첫 번째 코드(SuccessHandler) 참고
+                    .maxMileage(0)
+                    .recentTotal(0)
 
-            userRepository.save(newUser); // ★ DB에 저장 (신규 가입 완료)
+                    // (추정) User 엔티티에 Role 필드가 필수(nullable=false)일 경우
+                    // .role(Role.ROLE_USER)
+                    .build();
+            newUser.setAddress(new Address("10540", "경기도 고양시 덕양구 항공대학로 76", "한국항공대학교"));
+
+            userRepository.save(newUser);
+
+            // ★★★ Address 필드가 필수이므로, 빌드 후 별도로 세팅 ★★★
+            // (첫 번째 코드(SuccessHandler) 참고)
     }
 
         // 3) Security에서 사용할 attributes를 확장:
