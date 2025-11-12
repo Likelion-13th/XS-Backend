@@ -65,6 +65,7 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 
         if (userOptional.isEmpty()) {
             // ★★★ 여기가 최종 수정 지점 ★★★
+            log.info("신규 유저 확인, 새로운 유저 정보를 생성합니다. providerId = " + providerId);
             User newUser = User.builder()
                     .providerId(providerId)
                     .usernickname(nickname)
