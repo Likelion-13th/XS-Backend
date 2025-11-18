@@ -75,7 +75,7 @@ public class SecurityConfig {
                 .addFilterBefore(authCreationFilter, AnonymousAuthenticationFilter.class)
                 .addFilterBefore(jwtValidationFilter, AuthCreationFilter.class);
 
-//        http.csrf().disable() // CSRF 비활성화
+//        http.csrf(csrf -> csrf.disable()) // CSRF 비활성화
 //                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()); // 모든 요청 허용
         return http.build();
     }
@@ -87,7 +87,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
                 "http://sajang-dev-env.eba-riup6cju.ap-northeast-2.elasticbeanstalk.com",
-                "https://xsfrontend.netlify.app/",
+                "https://xsfrontend.netlify.app",
                 "http://localhost:8080"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
